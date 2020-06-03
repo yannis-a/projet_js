@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestion des étudiants</title>
+    <link rel="stylesheet" href="../td4/lib/bootstrap.min.css">
+    <link rel="stylesheet" media="screen" type="text/css" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+<header>
+    <br><br>
+    <h1 id="titre-page" class="titre">Gestion des étudiants</h1>
+</header>
+
+<div class="box">
+
+    <!-- item create uptade  -->
+    <div class="none" id="item-cud">
+
+        <nav class="nav navbar">
+            <div class="col-sm-10">
+                <button id="btn-retourAjout" class="btn btn-default" onclick="retour()">Retour</button>
+                <span id="titre" class="h2 titre">Ajout d'un étudiant</span>
+            </div>
+        </nav>
+
+        <form id="formulaire" method="POST"
+              class="form-horizontal">
+
+            <div class="form-group" id="formulaire-id">
+                <label for="id" class="col-sm-2 control-label">Id</label>
+                <div class="col-sm-5">
+                    <input type="text" id="id" name="id" disabled="disabled">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="nom" class="col-sm-2 control-label">Nom</label>
+                <div class="col-sm-5">
+                    <input type="text" id="nom" name="nom" placeholder="Dylan">
+                    <div id="erreur-nom" class="text-danger"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="prenom" class="col-sm-2 control-label">Prénom</label>
+                <div class="col-sm-5">
+                    <input type="text" id="prenom" name="prenom" placeholder="Bob">
+                    <div id="erreur-prenom" class="text-danger"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="ville" class="col-sm-2 control-label">Ville</label>
+                <div class="col-sm-5">
+                    <input type="text" id="ville" name="ville" placeholder="New York">
+                    <div id="erreur-ville" class="text-danger"></div>
+                </div>
+            </div>
+            <div id="doublon" class="text-danger"></div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button class="btn btn-success" type="submit" id="btn-valider">Valider</button>
+                    <button class="btn btn-warning" type="submit" id="btn-modif">Enregistrer les modifications</button>
+                    <button class="btn btn-danger" type="submit" id="btn-supprimer">Supprimer</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- item rechercher -->
+    <div class="item-recherche" id="item-recherche">
+        <nav class="nav navbar">
+            <h2 class="titre">Rechercher un étudiant</h2>
+        </nav>
+        <section>
+            <input id="search-bar" class="col-sm-5" autocomplete="off" value="" placeholder="Rechercher un étudiant...">
+        </section>
+    </div>
+
+    <!-- item liste des étudiants -->
+    <div class="item-liste" id="item-liste">
+        <nav class="nav navbar">
+            <button id="btn-ajouter" class="btn btn-link" onclick="ajouter()">Ajouter un étudiant</button>
+            <h2 id="titre-etat" class="titre">Liste des étudiants</h2>
+        </nav>
+
+        <section>
+            <table id="table-etudiants" class="table table-hover">
+                <thead>
+                <tr>
+                    <th id="th_nom">Nom</th>
+                    <th id="th_prenom">Prénom</th>
+                </tr>
+                </thead>
+                <tbody id="tbody">
+                </tbody>
+            </table>
+            <div id="pager">
+                <ul id="pagination" class="pagination-sm"></ul>
+            </div>
+        </section>
+    </div>
+</div>
+
+<footer>
+    <p>© 2020 Arcorio Yannis</p>
+</footer>
+
+
+<script type="text/javascript" src="script.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="twbs-pagination-master/jquery.twbsPagination.min.js"></script>
+
+
+</body>
+</html>

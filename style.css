@@ -1,0 +1,92 @@
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    width: 100%;
+}
+
+footer p {
+    margin: 0;
+}
+
+footer p {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#titre-page {
+    text-align: center;
+    font-size: 4em;
+    border: 2px solid #122b40;
+    border-radius: 50px;
+    margin: 0 25% 0 25%;
+}
+
+.titre {
+    color: #122b40;
+}
+
+#titre {
+    margin-right: 0;
+    margin-left: 20px;
+}
+
+th, td {
+    width: 100px;
+    height: 40px;
+}
+
+.btn{
+    margin: 5px;
+}
+
+/* flex box page*/
+.box {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 50px 50px 0 50px;
+}
+
+.item-ajouter {
+    display: block;
+    padding: 5px;
+    background-color: #ceffee;
+    border-radius: 20px;
+    align-self: flex-start;
+    text-align: center;
+    width: 40%;
+}
+
+.item-details {
+    margin: 20px;
+    padding: 5px;
+    order: 3;
+    width: 40%;
+    background-color: #ccffe8;
+    border-radius: 20px;
+    align-self: flex-start;
+    text-align: center;
+}
+
+.item-liste {
+    order: 2;
+    width: 50%;
+    margin: 20px;
+    padding: 5px;
+
+}
+
+.item-recherche {
+    order: 1;
+    margin: 20px;
+    width: 50%;
+}
+
+.none {
+    display: none;
+}
