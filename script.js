@@ -1,6 +1,6 @@
 const baseURL = 'http://localhost:9090/etudiants';
 const TITRE = document.getElementById('titre');
-const ITEMDETAILS = document.getElementById('item-cud');
+const ITEMDETAILS = document.getElementById('item-cu');
 const ITEMLISTE = document.getElementById('item-liste');
 const ITEMSEARCH = document.getElementById('item-recherche');
 const BODY = document.getElementById('tbody');
@@ -84,6 +84,7 @@ function valideForm(event) {
         ERREURVILLE.innerHTML = 'La ville doit contenir au moins 4 caractères et ne peut contenir de caractères spéciaux'
     }
 
+    /* ajout me permet de différencier si je suis dans l'état ajout ou details */
     if (ajout) {
         if (valide && !doublon(NOM.value, PRENOM.value)) {
             return true;
