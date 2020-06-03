@@ -129,6 +129,7 @@ function detailsEtudiant(id) {
 
     BTNMODIF.onclick = function () {
         modifierEtudiant(id);
+        generate_table();
     };
     BTNSUPP.className = 'btn btn-danger';
     BTNSUPP.onclick = function () {
