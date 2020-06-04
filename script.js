@@ -213,7 +213,7 @@ function ajoutListeEtudiant() {
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).then(response => {  /* syntaxe qui remplace function(response) {...}  */
+        }).then(response => {
             if (response.ok) {
                 alert('Ajout réussi !');
                 ITEMLISTE.className = 'item-liste';
@@ -311,7 +311,6 @@ function recherche() {
     const saisie = this.value;
 
     let etudiants = BODY.childNodes;
-    console.log(etudiants);
     for (let i = 0; i < etudiants.length; i++) {
         let etu = etudiants[i];
         let nom = etu.childNodes[0].innerHTML;
@@ -320,9 +319,9 @@ function recherche() {
     }
 }
 
-FORMULAIRE.addEventListener("submit", valideForm);
+FORMULAIRE.addEventListener("click", valideForm);
 BTNVALID.addEventListener("click", ajoutListeEtudiant);
-BTNVALID.addEventListener("submit", generate_table);
+BTNVALID.addEventListener("click", generate_table);
 SEARCH.addEventListener("keyup", recherche);
 window.onload = function () {
     generate_table();
