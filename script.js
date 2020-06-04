@@ -62,7 +62,22 @@ function retour() {
     ajout = false;
 }
 
-function valideForm(event) {
+function doublon(n, p) {
+    let valide = false;
+    let etudiants = BODY.childNodes;
+    for (let i = 0; i < etudiants.length; i++) {
+        let etu = etudiants[i];
+        let nom = etu.childNodes[0].innerHTML;
+        let prenom = etu.childNodes[1].innerHTML;
+        if (Object.is(nom.toUpperCase(), n.toUpperCase()) && Object.is(prenom.toUpperCase(), p.toUpperCase())) {
+            valide = true;
+            DOUBLON.innerHTML = 'Etudiant déjà existant !'
+        }
+    }
+    return valide;
+}
+
+function valideInput() {
     let valide = true;
     ERREURNOM.innerHTML = '';
     ERREURPRENOM.innerHTML = '';
@@ -83,36 +98,24 @@ function valideForm(event) {
         valide = false;
         ERREURVILLE.innerHTML = 'La ville doit contenir au moins 4 caractères et ne peut contenir de caractères spéciaux'
     }
+    return valide;
+}
 
+function valideForm(event) {
     /* ajout me permet de différencier si je suis dans l'état ajout ou details */
     if (ajout) {
-        if (valide && !doublon(NOM.value, PRENOM.value)) {
+        if (valideInput() && !doublon(NOM.value, PRENOM.value)) {
             return true;
         } else {
             event.preventDefault();
         }
     } else {
-        if (valide) {
+        if (valideInput()) {
             return true;
         } else {
             event.preventDefault();
         }
     }
-}
-
-function doublon(n, p) {
-    let valide = false;
-    let etudiants = BODY.childNodes;
-    for (let i = 0; i < etudiants.length; i++) {
-        let etu = etudiants[i];
-        let nom = etu.childNodes[0].innerHTML;
-        let prenom = etu.childNodes[1].innerHTML;
-        if (Object.is(nom.toUpperCase(), n.toUpperCase()) && Object.is(prenom.toUpperCase(), p.toUpperCase())) {
-            valide = true;
-            DOUBLON.innerHTML = 'Etudiant déjà existant !'
-        }
-    }
-    return valide;
 }
 
 function detailsEtudiant(id) {
