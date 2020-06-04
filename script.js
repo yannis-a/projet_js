@@ -62,7 +62,22 @@ function retour() {
     ajout = false;
 }
 
-function valideForm(event) {
+function doublon(n, p) {
+    let valide = false;
+    let etudiants = BODY.childNodes;
+    for (let i = 0; i < etudiants.length; i++) {
+        let etu = etudiants[i];
+        let nom = etu.childNodes[0].innerHTML;
+        let prenom = etu.childNodes[1].innerHTML;
+        if (Object.is(nom.toUpperCase(), n.toUpperCase()) && Object.is(prenom.toUpperCase(), p.toUpperCase())) {
+            valide = true;
+            DOUBLON.innerHTML = 'Etudiant déjà existant !'
+        }
+    }
+    return valide;
+}
+
+function valideInput() {
     let valide = true;
     ERREURNOM.innerHTML = '';
     ERREURPRENOM.innerHTML = '';
@@ -83,36 +98,24 @@ function valideForm(event) {
         valide = false;
         ERREURVILLE.innerHTML = 'La ville doit contenir au moins 4 caractères et ne peut contenir de caractères spéciaux'
     }
+    return valide;
+}
 
+function valideForm(event) {
     /* ajout me permet de différencier si je suis dans l'état ajout ou details */
     if (ajout) {
-        if (valide && !doublon(NOM.value, PRENOM.value)) {
+        if (valideInput() && !doublon(NOM.value, PRENOM.value)) {
             return true;
         } else {
             event.preventDefault();
         }
     } else {
-        if (valide) {
+        if (valideInput()) {
             return true;
         } else {
             event.preventDefault();
         }
     }
-}
-
-function doublon(n, p) {
-    let valide = false;
-    let etudiants = BODY.childNodes;
-    for (let i = 0; i < etudiants.length; i++) {
-        let etu = etudiants[i];
-        let nom = etu.childNodes[0].innerHTML;
-        let prenom = etu.childNodes[1].innerHTML;
-        if (Object.is(nom.toUpperCase(), n.toUpperCase()) && Object.is(prenom.toUpperCase(), p.toUpperCase())) {
-            valide = true;
-            DOUBLON.innerHTML = 'Etudiant déjà existant !'
-        }
-    }
-    return valide;
 }
 
 function detailsEtudiant(id) {
@@ -129,12 +132,12 @@ function detailsEtudiant(id) {
 
     BTNMODIF.onclick = function () {
         modifierEtudiant(id);
-        generate_table();
+        afficherTable();
     };
     BTNSUPP.className = 'btn btn-danger';
     BTNSUPP.onclick = function () {
         supprimerEtudiant(id);
-        generate_table();
+        afficherTable();
         ITEMLISTE.className = 'item-liste';
         ITEMSEARCH.className = 'item-recherche';
         ITEMDETAILS.className = 'none';
@@ -180,11 +183,6 @@ function modifierEtudiant(id) {
         }).then(response => {  /* syntaxe qui remplace function(response) {...}  */
             if (response.ok) {
                 alert('Modification réussie !');
-                response.json()
-                    .then(console.log)
-                    .catch(error => {
-                        console.error(error);
-                    });
             } else {
                 console.error('server response : ' + response.status);
             }
@@ -210,12 +208,13 @@ function ajoutListeEtudiant() {
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).then(response => {  /* syntaxe qui remplace function(response) {...}  */
+        }).then(response => {
             if (response.ok) {
                 alert('Ajout réussi !');
                 ITEMLISTE.className = 'item-liste';
                 ITEMSEARCH.className = 'item-recherche';
                 ITEMDETAILS.className = 'none';
+                afficherTable();
             } else {
                 console.error('server response : ' + response.status);
             }
@@ -230,7 +229,6 @@ function supprimerEtudiant(id) {
         fetch(baseURL + '/' + id, {method: "DELETE"})
             .then(response => {  /* syntaxe qui remplace function(response) {...}  */
                 if (response.ok) {
-                    generate_table();
                     alert('Etudiant surpprimé !');
                 } else {
                     console.error('server response : ' + response.status);
@@ -241,74 +239,41 @@ function supprimerEtudiant(id) {
     }
 }
 
-function viderTable() {
-    BODY.innerHTML = '';
-}
+function afficherTable() {
+    fetch(baseURL).then(function (response) {
+        response.json()
+            .then(function (json) {
+                console.log(json);
+                BODY.innerHTML = '';
+                for (let i = 0; i < json.length; i++) {
+                    const tr = document.createElement('tr');
+                    const id = json[i].id;
+                    tr.id = 'tr_' + id;
 
-/* Utilisation d'une lib twbs-pagination-master/jquery.twbsPagination.min.js de jquery pour la pagination.*/
-function generate_table() {
-    viderTable();
-    let totalEtudiants = 0;
-    let etudiants = [];
-    let displayEtudiants = [];
-    let recPerPage = 4;
-    let totalPages = 0;
+                    const td_nom = document.createElement('td');
+                    const nom = document.createTextNode(json[i].nom.toUpperCase());
+                    td_nom.id = 'nom-' + id;
+                    td_nom.appendChild(nom);
+                    tr.appendChild(td_nom);
 
-    $.ajax({
-        url: "http://localhost:9090/etudiants",
-        type: 'GET',
-        dataType: 'json',
-        success: function (data) {
-            etudiants = data;
-            console.log(etudiants);
-            totalEtudiants = etudiants.length;
-            totalPages = Math.ceil(totalEtudiants / recPerPage);
-            $('#pagination').twbsPagination({
-                totalPages: totalPages,
-                visiblePages: 6,
-                onPageClick: function (event, page) {
-                    let displayEtudiantsIndex = Math.max(page - 1, 0) * recPerPage;
-                    let endEtudiants = (displayEtudiantsIndex) + recPerPage;
+                    const td_prenom = document.createElement('td');
+                    const prenom = document.createTextNode(strUpFirst(json[i].prenom));
+                    td_prenom.id = 'prenom-' + id;
+                    td_prenom.appendChild(prenom);
+                    tr.appendChild(td_prenom);
 
-                    displayEtudiants = etudiants.slice(displayEtudiantsIndex, endEtudiants);
-
-                    $('#tbody').html('');
-                    for (let i = 0; i < displayEtudiants.length; i++) {
-
-                        const tr = document.createElement('tr');
-                        const id = displayEtudiants[i].id;
-                        tr.id = 'tr_' + id;
-
-                        const td_nom = document.createElement('td');
-                        const nom = document.createTextNode(displayEtudiants[i].nom.toUpperCase());
-                        td_nom.id = 'nom-' + id;
-                        td_nom.appendChild(nom);
-                        tr.appendChild(td_nom);
-
-                        const td_prenom = document.createElement('td');
-                        const prenom = document.createTextNode(strUpFirst(displayEtudiants[i].prenom));
-                        td_prenom.id = 'prenom-' + id;
-                        td_prenom.appendChild(prenom);
-                        tr.appendChild(td_prenom);
-
-                        tr.onclick = function () {
-                            detailsEtudiant(id);
-                        };
-                        BODY.appendChild(tr);
-                    }
+                    tr.onclick = function () {
+                        detailsEtudiant(id);
+                    };
+                    BODY.appendChild(tr);
                 }
-            });
-        }, error: function (resultat, statut, erreur) {
-            alert('Erreur : ' + erreur);
-        }
-    });
+            })
+    })
 }
 
 function recherche() {
     const saisie = this.value;
-
     let etudiants = BODY.childNodes;
-    console.log(etudiants);
     for (let i = 0; i < etudiants.length; i++) {
         let etu = etudiants[i];
         let nom = etu.childNodes[0].innerHTML;
@@ -317,11 +282,9 @@ function recherche() {
     }
 }
 
-FORMULAIRE.addEventListener("submit", valideForm);
+FORMULAIRE.addEventListener("click", valideForm);
 BTNVALID.addEventListener("click", ajoutListeEtudiant);
-BTNVALID.addEventListener("submit", generate_table);
 SEARCH.addEventListener("keyup", recherche);
 window.onload = function () {
-    generate_table();
+    afficherTable();
 };
-
