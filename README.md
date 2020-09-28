@@ -1,6 +1,6 @@
 projet_js 
 
-Il faut démarer le serveur en exécutant la commande : 
+Il faut démarrer le serveur en exécutant la commande : 
 
 java -jar api-rest-etudiant-0.0.1-SNAPSHOT.jar
 
